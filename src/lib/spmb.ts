@@ -15,7 +15,7 @@ export type RegStatus =
 
 export const STATUS_LABEL: Record<RegStatus, string> = {
   draft: "Draft",
-  submitted: "Menunggu Verifikasi",
+  submitted: "Diproses",
   verified: "Terverifikasi",
   rejected: "Perlu Perbaikan",
   accepted: "Diterima",

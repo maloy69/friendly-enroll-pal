@@ -64,9 +64,13 @@ export function AppHeader() {
                   <Link to="/operator">Panel Operator</Link>
                 </Button>
               )}
+              <Button asChild variant="ghost" size="sm">
+                <Link to="/pendaftaran-saya">Pendaftaran Anak</Link>
+              </Button>
               <Button asChild size="sm">
                 <Link to="/dashboard">Dashboard Saya</Link>
               </Button>
+
               <Button variant="ghost" size="icon" aria-label="Keluar" onClick={() => void signOut()}>
                 <LogOut className="size-4" />
               </Button>
@@ -119,6 +123,14 @@ export function AppHeader() {
                 >
                   Dashboard Saya
                 </Link>
+                <Link
+                  to="/pendaftaran-saya"
+                  onClick={() => setOpen(false)}
+                  className="rounded-md px-3 py-2 text-sm hover:bg-accent"
+                >
+                  Pendaftaran Anak
+                </Link>
+
                 {isStaff && (
                   <Link
                     to="/operator"

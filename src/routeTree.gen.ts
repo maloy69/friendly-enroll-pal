@@ -19,9 +19,11 @@ import { Route as PengumumanRouteImport } from './routes/pengumuman'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedKartuRouteImport } from './routes/_authenticated/kartu'
 import { Route as AuthenticatedOperatorRouteRouteImport } from './routes/_authenticated/operator/route'
+import { Route as AuthenticatedPendaftaranSayaRouteImport } from './routes/_authenticated/pendaftaran-saya'
 import { Route as AuthenticatedOperatorIndexRouteImport } from './routes/_authenticated/operator/index'
 import { Route as AuthenticatedOperatorAuditRouteImport } from './routes/_authenticated/operator/audit'
 import { Route as AuthenticatedOperatorDokumenRouteImport } from './routes/_authenticated/operator/dokumen'
+import { Route as AuthenticatedOperatorHasilRouteImport } from './routes/_authenticated/operator/hasil'
 import { Route as AuthenticatedOperatorPengaturanRouteImport } from './routes/_authenticated/operator/pengaturan'
 import { Route as AuthenticatedOperatorRingkasanRouteImport } from './routes/_authenticated/operator/ringkasan'
 import { Route as AuthenticatedOperatorScanRouteImport } from './routes/_authenticated/operator/scan'
@@ -77,6 +79,12 @@ const AuthenticatedOperatorRouteRoute =
     path: '/operator',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedPendaftaranSayaRoute =
+  AuthenticatedPendaftaranSayaRouteImport.update({
+    id: '/pendaftaran-saya',
+    path: '/pendaftaran-saya',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedOperatorIndexRoute =
   AuthenticatedOperatorIndexRouteImport.update({
     id: '/',
@@ -93,6 +101,12 @@ const AuthenticatedOperatorDokumenRoute =
   AuthenticatedOperatorDokumenRouteImport.update({
     id: '/dokumen',
     path: '/dokumen',
+    getParentRoute: () => AuthenticatedOperatorRouteRoute,
+  } as any)
+const AuthenticatedOperatorHasilRoute =
+  AuthenticatedOperatorHasilRouteImport.update({
+    id: '/hasil',
+    path: '/hasil',
     getParentRoute: () => AuthenticatedOperatorRouteRoute,
   } as any)
 const AuthenticatedOperatorPengaturanRoute =
@@ -130,8 +144,10 @@ export interface FileRoutesByFullPath {
   '/operator': typeof AuthenticatedOperatorRouteRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/kartu': typeof AuthenticatedKartuRoute
+  '/pendaftaran-saya': typeof AuthenticatedPendaftaranSayaRoute
   '/operator/audit': typeof AuthenticatedOperatorAuditRoute
   '/operator/dokumen': typeof AuthenticatedOperatorDokumenRoute
+  '/operator/hasil': typeof AuthenticatedOperatorHasilRoute
   '/operator/pengaturan': typeof AuthenticatedOperatorPengaturanRoute
   '/operator/ringkasan': typeof AuthenticatedOperatorRingkasanRoute
   '/operator/scan': typeof AuthenticatedOperatorScanRoute
@@ -147,8 +163,10 @@ export interface FileRoutesByTo {
   '/pengumuman': typeof PengumumanRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/kartu': typeof AuthenticatedKartuRoute
+  '/pendaftaran-saya': typeof AuthenticatedPendaftaranSayaRoute
   '/operator/audit': typeof AuthenticatedOperatorAuditRoute
   '/operator/dokumen': typeof AuthenticatedOperatorDokumenRoute
+  '/operator/hasil': typeof AuthenticatedOperatorHasilRoute
   '/operator/pengaturan': typeof AuthenticatedOperatorPengaturanRoute
   '/operator/ringkasan': typeof AuthenticatedOperatorRingkasanRoute
   '/operator/scan': typeof AuthenticatedOperatorScanRoute
@@ -167,8 +185,10 @@ export interface FileRoutesById {
   '/_authenticated/operator': typeof AuthenticatedOperatorRouteRouteWithChildren
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/kartu': typeof AuthenticatedKartuRoute
+  '/_authenticated/pendaftaran-saya': typeof AuthenticatedPendaftaranSayaRoute
   '/_authenticated/operator/audit': typeof AuthenticatedOperatorAuditRoute
   '/_authenticated/operator/dokumen': typeof AuthenticatedOperatorDokumenRoute
+  '/_authenticated/operator/hasil': typeof AuthenticatedOperatorHasilRoute
   '/_authenticated/operator/pengaturan': typeof AuthenticatedOperatorPengaturanRoute
   '/_authenticated/operator/ringkasan': typeof AuthenticatedOperatorRingkasanRoute
   '/_authenticated/operator/scan': typeof AuthenticatedOperatorScanRoute
@@ -187,8 +207,10 @@ export interface FileRouteTypes {
     | '/operator'
     | '/dashboard'
     | '/kartu'
+    | '/pendaftaran-saya'
     | '/operator/audit'
     | '/operator/dokumen'
+    | '/operator/hasil'
     | '/operator/pengaturan'
     | '/operator/ringkasan'
     | '/operator/scan'
@@ -204,8 +226,10 @@ export interface FileRouteTypes {
     | '/pengumuman'
     | '/dashboard'
     | '/kartu'
+    | '/pendaftaran-saya'
     | '/operator/audit'
     | '/operator/dokumen'
+    | '/operator/hasil'
     | '/operator/pengaturan'
     | '/operator/ringkasan'
     | '/operator/scan'
@@ -223,8 +247,10 @@ export interface FileRouteTypes {
     | '/_authenticated/operator'
     | '/_authenticated/dashboard'
     | '/_authenticated/kartu'
+    | '/_authenticated/pendaftaran-saya'
     | '/_authenticated/operator/audit'
     | '/_authenticated/operator/dokumen'
+    | '/_authenticated/operator/hasil'
     | '/_authenticated/operator/pengaturan'
     | '/_authenticated/operator/ringkasan'
     | '/_authenticated/operator/scan'
@@ -314,6 +340,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedOperatorRouteRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/pendaftaran-saya': {
+      id: '/_authenticated/pendaftaran-saya'
+      path: '/pendaftaran-saya'
+      fullPath: '/pendaftaran-saya'
+      preLoaderRoute: typeof AuthenticatedPendaftaranSayaRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/operator/': {
       id: '/_authenticated/operator/'
       path: '/'
@@ -333,6 +366,13 @@ declare module '@tanstack/react-router' {
       path: '/dokumen'
       fullPath: '/operator/dokumen'
       preLoaderRoute: typeof AuthenticatedOperatorDokumenRouteImport
+      parentRoute: typeof AuthenticatedOperatorRouteRoute
+    }
+    '/_authenticated/operator/hasil': {
+      id: '/_authenticated/operator/hasil'
+      path: '/hasil'
+      fullPath: '/operator/hasil'
+      preLoaderRoute: typeof AuthenticatedOperatorHasilRouteImport
       parentRoute: typeof AuthenticatedOperatorRouteRoute
     }
     '/_authenticated/operator/pengaturan': {
@@ -369,6 +409,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedOperatorRouteRouteChildren {
   AuthenticatedOperatorAuditRoute: typeof AuthenticatedOperatorAuditRoute
   AuthenticatedOperatorDokumenRoute: typeof AuthenticatedOperatorDokumenRoute
+  AuthenticatedOperatorHasilRoute: typeof AuthenticatedOperatorHasilRoute
   AuthenticatedOperatorPengaturanRoute: typeof AuthenticatedOperatorPengaturanRoute
   AuthenticatedOperatorRingkasanRoute: typeof AuthenticatedOperatorRingkasanRoute
   AuthenticatedOperatorScanRoute: typeof AuthenticatedOperatorScanRoute
@@ -380,6 +421,7 @@ const AuthenticatedOperatorRouteRouteChildren: AuthenticatedOperatorRouteRouteCh
   {
     AuthenticatedOperatorAuditRoute: AuthenticatedOperatorAuditRoute,
     AuthenticatedOperatorDokumenRoute: AuthenticatedOperatorDokumenRoute,
+    AuthenticatedOperatorHasilRoute: AuthenticatedOperatorHasilRoute,
     AuthenticatedOperatorPengaturanRoute: AuthenticatedOperatorPengaturanRoute,
     AuthenticatedOperatorRingkasanRoute: AuthenticatedOperatorRingkasanRoute,
     AuthenticatedOperatorScanRoute: AuthenticatedOperatorScanRoute,
@@ -396,12 +438,14 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedOperatorRouteRoute: typeof AuthenticatedOperatorRouteRouteWithChildren
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedKartuRoute: typeof AuthenticatedKartuRoute
+  AuthenticatedPendaftaranSayaRoute: typeof AuthenticatedPendaftaranSayaRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedOperatorRouteRoute: AuthenticatedOperatorRouteRouteWithChildren,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedKartuRoute: AuthenticatedKartuRoute,
+  AuthenticatedPendaftaranSayaRoute: AuthenticatedPendaftaranSayaRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

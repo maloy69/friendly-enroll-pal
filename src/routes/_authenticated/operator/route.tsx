@@ -15,6 +15,8 @@ const TAB = [
   { to: "/operator", label: "Pendaftar", exact: true },
   { to: "/operator/dokumen", label: "Dokumen", exact: false },
   { to: "/operator/seleksi", label: "Seleksi & Peringkat", exact: false },
+  { to: "/operator/hasil", label: "Hasil per Jurusan", exact: false },
+
   { to: "/operator/pengaturan", label: "Pengaturan", exact: false },
   { to: "/operator/scan", label: "Daftar Ulang", exact: false },
   { to: "/operator/audit", label: "Riwayat Aktivitas", exact: false },
