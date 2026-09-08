@@ -181,6 +181,114 @@ function DaftarPendaftar() {
 
   const namaJurusan = (id: string | null) => majors?.find((m) => m.id === id)?.name ?? "-";
 
+  const totalHalaman = Math.max(1, Math.ceil(daftar.length / pageSize));
+  const halaman = Math.min(page, totalHalaman);
+  const tampil = daftar.slice((halaman - 1) * pageSize, halaman * pageSize);
+  const semuaTercentang = tampil.length > 0 && tampil.every((r) => checked.includes(r.id));
+
+  function bukaTambah() {
+    setFormAwal(null);
+    setFormOpen(true);
+  }
+
+  function bukaEdit(r: Reg) {
+    const ambil = (k: string) => {
+      const v = r[k];
+      return v === null || v === undefined ? "" : String(v);
+    };
+    setFormAwal({
+      id: r.id,
+      full_name: ambil("full_name"),
+      nisn: ambil("nisn"),
+      nik: ambil("nik"),
+      gender: ambil("gender") || "L",
+      birth_place: ambil("birth_place"),
+      birth_date: ambil("birth_date"),
+      address: ambil("address"),
+      village: ambil("village"),
+      district: ambil("district"),
+      city: ambil("city"),
+      province: ambil("province"),
+      postal_code: ambil("postal_code"),
+      previous_school: ambil("previous_school"),
+      graduation_year: ambil("graduation_year"),
+      parent_name: ambil("parent_name"),
+      parent_phone: ambil("parent_phone"),
+      parent_job: ambil("parent_job"),
+      parent_email: ambil("parent_email"),
+      first_choice_id: ambil("first_choice_id"),
+      second_choice_id: ambil("second_choice_id"),
+      status: ambil("status") || "submitted",
+      verify_note: ambil("verify_note"),
+    });
+    setFormOpen(true);
+  }
+
+  async function hapus(r: Reg) {
+    if (!window.confirm(`Hapus data pendaftar "${r.full_name ?? "-"}"? Tindakan ini permanen.`)) return;
+    await db.from("registration_scores").delete().eq("registration_id", r.id);
+    await db.from("documents").delete().eq("registration_id", r.id);
+    const { error } = await db.from("registrations").delete().eq("id", r.id);
+    if (error) {
+      toast.error("Gagal menghapus data pendaftar.");
+      return;
+    }
+    await catatAudit("hapus_pendaftar", "registrations", r.id);
+    toast.success("Data pendaftar dihapus.");
+    setChecked((c) => c.filter((id) => id !== r.id));
+    void refetch();
+  }
+
+  async function ubahStatusMassal(status: RegStatus) {
+    if (checked.length === 0) return;
+    const payload: Record<string, unknown> = { status };
+    if (status === "verified") payload["verified_at"] = new Date().toISOString();
+    const { error } = await db.from("registrations").update(payload).in("id", checked);
+    if (error) {
+      toast.error("Gagal mengubah status massal.");
+      return;
+    }
+    await catatAudit("ubah_status_massal", "registrations", null, {
+      status,
+      jumlah: checked.length,
+    });
+    toast.success(`${checked.length} pendaftar diubah menjadi ${STATUS_LABEL[status]}.`);
+    setChecked([]);
+    void refetch();
+  }
+
+  function unduh() {
+    const isi = keCSV(
+      daftar.map((r) => ({
+        registration_number: r.registration_number ?? "",
+        full_name: r.full_name ?? "",
+        nisn: r.nisn ?? "",
+        gender: r.gender === "P" ? "Perempuan" : r.gender === "L" ? "Laki-laki" : "",
+        previous_school: r.previous_school ?? "",
+        parent_phone: r.parent_phone ?? "",
+        pilihan1: namaJurusan(r.first_choice_id),
+        pilihan2: namaJurusan(r.second_choice_id),
+        total_score: r.total_score ?? "",
+        status: STATUS_LABEL[r.status],
+        submitted_at: fmtWIB(r.submitted_at),
+      })),
+      [
+        { key: "registration_number", label: "No. Pendaftaran" },
+        { key: "full_name", label: "Nama" },
+        { key: "nisn", label: "NISN" },
+        { key: "gender", label: "Jenis Kelamin" },
+        { key: "previous_school", label: "Asal Sekolah" },
+        { key: "parent_phone", label: "No. HP Orang Tua" },
+        { key: "pilihan1", label: "Pilihan 1" },
+        { key: "pilihan2", label: "Pilihan 2" },
+        { key: "total_score", label: "Skor" },
+        { key: "status", label: "Status" },
+        { key: "submitted_at", label: "Dikirim" },
+      ],
+    );
+    unduhCSV(`pendaftar-spmb-${new Date().toISOString().slice(0, 10)}.csv`, isi);
+  }
+
   return (
     <div>
       <div className="flex flex-wrap items-center gap-2">
@@ -189,14 +297,20 @@ function DaftarPendaftar() {
           <Input
             className="pl-9"
             value={q}
-            onChange={(e) => setQ(e.target.value)}
+            onChange={(e) => {
+              setQ(e.target.value);
+              setPage(1);
+            }}
             placeholder="Cari nama, NISN, atau nomor pendaftaran"
           />
         </div>
         <select
           className="h-9 rounded-md border border-input bg-background px-3 text-sm"
           value={filter}
-          onChange={(e) => setFilter(e.target.value)}
+          onChange={(e) => {
+            setFilter(e.target.value);
+            setPage(1);
+          }}
         >
           {FILTER.map((f) => (
             <option key={f.key} value={f.key}>
@@ -204,40 +318,107 @@ function DaftarPendaftar() {
             </option>
           ))}
         </select>
+        <Button variant="outline" onClick={unduh}>
+          <Download className="mr-1 size-4" /> Unduh CSV
+        </Button>
+        <Button onClick={bukaTambah}>
+          <Plus className="mr-1 size-4" /> Tambah Pendaftar
+        </Button>
       </div>
+
+      {checked.length > 0 && (
+        <div className="mt-3 flex flex-wrap items-center gap-2 rounded-lg border bg-muted/40 p-3 text-sm">
+          <span>{checked.length} dipilih</span>
+          <select
+            className="h-8 rounded-md border border-input bg-background px-2 text-sm"
+            defaultValue=""
+            onChange={(e) => {
+              if (e.target.value) void ubahStatusMassal(e.target.value as RegStatus);
+              e.target.value = "";
+            }}
+          >
+            <option value="">Ubah status massal…</option>
+            {FILTER.filter((f) => f.key !== "all").map((f) => (
+              <option key={f.key} value={f.key}>
+                {f.label}
+              </option>
+            ))}
+          </select>
+          <Button size="sm" variant="ghost" onClick={() => setChecked([])}>
+            Batal pilih
+          </Button>
+        </div>
+      )}
 
       <div className="mt-5 overflow-x-auto rounded-xl border">
         <table className="w-full text-sm">
           <thead className="bg-muted/60 text-left">
             <tr>
+              <th className="p-3">
+                <Checkbox
+                  checked={semuaTercentang}
+                  onCheckedChange={(v) =>
+                    setChecked(v ? [...new Set([...checked, ...tampil.map((r) => r.id)])] : [])
+                  }
+                  aria-label="Pilih semua"
+                />
+              </th>
               <th className="p-3 font-medium">No. Pendaftaran</th>
               <th className="p-3 font-medium">Nama</th>
+              <th className="p-3 font-medium">NISN</th>
+              <th className="p-3 font-medium">L/P</th>
               <th className="p-3 font-medium">Pilihan 1</th>
+              <th className="p-3 font-medium">Skor</th>
               <th className="p-3 font-medium">Dikirim</th>
               <th className="p-3 font-medium">Status</th>
               <th className="p-3" />
             </tr>
           </thead>
           <tbody>
-            {daftar.map((r) => (
+            {tampil.map((r) => (
               <tr key={r.id} className="border-t">
+                <td className="p-3">
+                  <Checkbox
+                    checked={checked.includes(r.id)}
+                    onCheckedChange={(v) =>
+                      setChecked((c) => (v ? [...c, r.id] : c.filter((id) => id !== r.id)))
+                    }
+                    aria-label={`Pilih ${r.full_name ?? ""}`}
+                  />
+                </td>
                 <td className="p-3 font-medium">{r.registration_number}</td>
                 <td className="p-3">{r.full_name ?? "-"}</td>
+                <td className="p-3 text-muted-foreground">{r.nisn ?? "-"}</td>
+                <td className="p-3 text-muted-foreground">{r.gender ?? "-"}</td>
                 <td className="p-3">{namaJurusan(r.first_choice_id)}</td>
+                <td className="p-3">{r.total_score ?? "-"}</td>
                 <td className="p-3 text-muted-foreground">{fmtWIB(r.submitted_at)}</td>
                 <td className="p-3">
                   <Badge className={STATUS_CLASS[r.status]}>{STATUS_LABEL[r.status]}</Badge>
                 </td>
-                <td className="p-3 text-right">
-                  <Button size="sm" variant="outline" onClick={() => setSelected(r)}>
-                    Periksa
-                  </Button>
+                <td className="p-3">
+                  <div className="flex justify-end gap-1">
+                    <Button size="sm" variant="outline" onClick={() => setSelected(r)}>
+                      Periksa
+                    </Button>
+                    <Button size="sm" variant="ghost" onClick={() => bukaEdit(r)} aria-label="Edit">
+                      <Pencil className="size-4" />
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => void hapus(r)}
+                      aria-label="Hapus"
+                    >
+                      <Trash2 className="size-4 text-destructive" />
+                    </Button>
+                  </div>
                 </td>
               </tr>
             ))}
             {daftar.length === 0 && (
               <tr>
-                <td colSpan={6} className="p-10 text-center text-muted-foreground">
+                <td colSpan={10} className="p-10 text-center text-muted-foreground">
                   Belum ada pendaftar yang cocok dengan filter ini.
                 </td>
               </tr>
@@ -245,6 +426,55 @@ function DaftarPendaftar() {
           </tbody>
         </table>
       </div>
+
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-sm">
+        <span className="text-muted-foreground">
+          {daftar.length} pendaftar · halaman {halaman} dari {totalHalaman}
+        </span>
+        <div className="flex items-center gap-2">
+          <select
+            className="h-8 rounded-md border border-input bg-background px-2 text-sm"
+            value={pageSize}
+            onChange={(e) => {
+              setPageSize(Number(e.target.value));
+              setPage(1);
+            }}
+          >
+            {[10, 25, 50, 100].map((n) => (
+              <option key={n} value={n}>
+                {n} / halaman
+              </option>
+            ))}
+          </select>
+          <Button
+            size="sm"
+            variant="outline"
+            disabled={halaman <= 1}
+            onClick={() => setPage(halaman - 1)}
+          >
+            Sebelumnya
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            disabled={halaman >= totalHalaman}
+            onClick={() => setPage(halaman + 1)}
+          >
+            Berikutnya
+          </Button>
+        </div>
+      </div>
+
+      {formOpen && (
+        <RegistrationForm
+          open={formOpen}
+          onOpenChange={setFormOpen}
+          awal={formAwal}
+          majors={majors ?? []}
+          onSaved={() => void refetch()}
+        />
+      )}
+
 
       <Dialog open={!!selected} onOpenChange={(o) => !o && setSelected(null)}>
         <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
