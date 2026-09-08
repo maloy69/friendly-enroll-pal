@@ -123,6 +123,14 @@ export function AppHeader() {
                 >
                   Dashboard Saya
                 </Link>
+                <Link
+                  to="/pendaftaran-saya"
+                  onClick={() => setOpen(false)}
+                  className="rounded-md px-3 py-2 text-sm hover:bg-accent"
+                >
+                  Pendaftaran Anak
+                </Link>
+
                 {isStaff && (
                   <Link
                     to="/operator"
