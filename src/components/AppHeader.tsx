@@ -64,9 +64,13 @@ export function AppHeader() {
                   <Link to="/operator">Panel Operator</Link>
                 </Button>
               )}
+              <Button asChild variant="ghost" size="sm">
+                <Link to="/pendaftaran-saya">Pendaftaran Anak</Link>
+              </Button>
               <Button asChild size="sm">
                 <Link to="/dashboard">Dashboard Saya</Link>
               </Button>
+
               <Button variant="ghost" size="icon" aria-label="Keluar" onClick={() => void signOut()}>
                 <LogOut className="size-4" />
               </Button>
