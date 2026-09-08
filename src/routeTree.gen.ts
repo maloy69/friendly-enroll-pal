@@ -22,6 +22,7 @@ import { Route as AuthenticatedOperatorRouteRouteImport } from './routes/_authen
 import { Route as AuthenticatedOperatorIndexRouteImport } from './routes/_authenticated/operator/index'
 import { Route as AuthenticatedOperatorAuditRouteImport } from './routes/_authenticated/operator/audit'
 import { Route as AuthenticatedOperatorDokumenRouteImport } from './routes/_authenticated/operator/dokumen'
+import { Route as AuthenticatedOperatorHasilRouteImport } from './routes/_authenticated/operator/hasil'
 import { Route as AuthenticatedOperatorPengaturanRouteImport } from './routes/_authenticated/operator/pengaturan'
 import { Route as AuthenticatedOperatorRingkasanRouteImport } from './routes/_authenticated/operator/ringkasan'
 import { Route as AuthenticatedOperatorScanRouteImport } from './routes/_authenticated/operator/scan'
@@ -95,6 +96,12 @@ const AuthenticatedOperatorDokumenRoute =
     path: '/dokumen',
     getParentRoute: () => AuthenticatedOperatorRouteRoute,
   } as any)
+const AuthenticatedOperatorHasilRoute =
+  AuthenticatedOperatorHasilRouteImport.update({
+    id: '/hasil',
+    path: '/hasil',
+    getParentRoute: () => AuthenticatedOperatorRouteRoute,
+  } as any)
 const AuthenticatedOperatorPengaturanRoute =
   AuthenticatedOperatorPengaturanRouteImport.update({
     id: '/pengaturan',
@@ -132,6 +139,7 @@ export interface FileRoutesByFullPath {
   '/kartu': typeof AuthenticatedKartuRoute
   '/operator/audit': typeof AuthenticatedOperatorAuditRoute
   '/operator/dokumen': typeof AuthenticatedOperatorDokumenRoute
+  '/operator/hasil': typeof AuthenticatedOperatorHasilRoute
   '/operator/pengaturan': typeof AuthenticatedOperatorPengaturanRoute
   '/operator/ringkasan': typeof AuthenticatedOperatorRingkasanRoute
   '/operator/scan': typeof AuthenticatedOperatorScanRoute
@@ -149,6 +157,7 @@ export interface FileRoutesByTo {
   '/kartu': typeof AuthenticatedKartuRoute
   '/operator/audit': typeof AuthenticatedOperatorAuditRoute
   '/operator/dokumen': typeof AuthenticatedOperatorDokumenRoute
+  '/operator/hasil': typeof AuthenticatedOperatorHasilRoute
   '/operator/pengaturan': typeof AuthenticatedOperatorPengaturanRoute
   '/operator/ringkasan': typeof AuthenticatedOperatorRingkasanRoute
   '/operator/scan': typeof AuthenticatedOperatorScanRoute
@@ -169,6 +178,7 @@ export interface FileRoutesById {
   '/_authenticated/kartu': typeof AuthenticatedKartuRoute
   '/_authenticated/operator/audit': typeof AuthenticatedOperatorAuditRoute
   '/_authenticated/operator/dokumen': typeof AuthenticatedOperatorDokumenRoute
+  '/_authenticated/operator/hasil': typeof AuthenticatedOperatorHasilRoute
   '/_authenticated/operator/pengaturan': typeof AuthenticatedOperatorPengaturanRoute
   '/_authenticated/operator/ringkasan': typeof AuthenticatedOperatorRingkasanRoute
   '/_authenticated/operator/scan': typeof AuthenticatedOperatorScanRoute
@@ -189,6 +199,7 @@ export interface FileRouteTypes {
     | '/kartu'
     | '/operator/audit'
     | '/operator/dokumen'
+    | '/operator/hasil'
     | '/operator/pengaturan'
     | '/operator/ringkasan'
     | '/operator/scan'
@@ -206,6 +217,7 @@ export interface FileRouteTypes {
     | '/kartu'
     | '/operator/audit'
     | '/operator/dokumen'
+    | '/operator/hasil'
     | '/operator/pengaturan'
     | '/operator/ringkasan'
     | '/operator/scan'
@@ -225,6 +237,7 @@ export interface FileRouteTypes {
     | '/_authenticated/kartu'
     | '/_authenticated/operator/audit'
     | '/_authenticated/operator/dokumen'
+    | '/_authenticated/operator/hasil'
     | '/_authenticated/operator/pengaturan'
     | '/_authenticated/operator/ringkasan'
     | '/_authenticated/operator/scan'
@@ -335,6 +348,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedOperatorDokumenRouteImport
       parentRoute: typeof AuthenticatedOperatorRouteRoute
     }
+    '/_authenticated/operator/hasil': {
+      id: '/_authenticated/operator/hasil'
+      path: '/hasil'
+      fullPath: '/operator/hasil'
+      preLoaderRoute: typeof AuthenticatedOperatorHasilRouteImport
+      parentRoute: typeof AuthenticatedOperatorRouteRoute
+    }
     '/_authenticated/operator/pengaturan': {
       id: '/_authenticated/operator/pengaturan'
       path: '/pengaturan'
@@ -369,6 +389,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedOperatorRouteRouteChildren {
   AuthenticatedOperatorAuditRoute: typeof AuthenticatedOperatorAuditRoute
   AuthenticatedOperatorDokumenRoute: typeof AuthenticatedOperatorDokumenRoute
+  AuthenticatedOperatorHasilRoute: typeof AuthenticatedOperatorHasilRoute
   AuthenticatedOperatorPengaturanRoute: typeof AuthenticatedOperatorPengaturanRoute
   AuthenticatedOperatorRingkasanRoute: typeof AuthenticatedOperatorRingkasanRoute
   AuthenticatedOperatorScanRoute: typeof AuthenticatedOperatorScanRoute
@@ -380,6 +401,7 @@ const AuthenticatedOperatorRouteRouteChildren: AuthenticatedOperatorRouteRouteCh
   {
     AuthenticatedOperatorAuditRoute: AuthenticatedOperatorAuditRoute,
     AuthenticatedOperatorDokumenRoute: AuthenticatedOperatorDokumenRoute,
+    AuthenticatedOperatorHasilRoute: AuthenticatedOperatorHasilRoute,
     AuthenticatedOperatorPengaturanRoute: AuthenticatedOperatorPengaturanRoute,
     AuthenticatedOperatorRingkasanRoute: AuthenticatedOperatorRingkasanRoute,
     AuthenticatedOperatorScanRoute: AuthenticatedOperatorScanRoute,
