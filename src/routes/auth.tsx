@@ -43,6 +43,20 @@ function AuthPage() {
   const navigate = useNavigate();
   const search = Route.useSearch();
   const [busy, setBusy] = useState(false);
+  const [email, setEmail] = useState("");
+  const [sandi, setSandi] = useState("");
+
+  async function masukEmail() {
+    setBusy(true);
+    const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password: sandi });
+    if (error) {
+      toast.error("Email atau kata sandi salah.");
+      setBusy(false);
+      return;
+    }
+    toast.success("Berhasil masuk.");
+  }
+
 
   useEffect(() => {
     if (search.next) {
