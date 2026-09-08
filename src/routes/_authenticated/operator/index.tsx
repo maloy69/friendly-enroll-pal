@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { CheckCircle2, Search, XCircle } from "lucide-react";
+import { CheckCircle2, Download, Pencil, Plus, Search, Trash2, XCircle } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -13,10 +13,13 @@ import {
   STATUS_LABEL,
   type RegStatus,
 } from "@/lib/spmb";
+import { keCSV, unduhCSV } from "@/lib/statistik";
+import { RegistrationForm, type RegForm } from "@/components/operator/RegistrationForm";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogContent,
@@ -35,6 +38,7 @@ type Reg = {
   registration_number: string | null;
   full_name: string | null;
   nisn: string | null;
+  gender: string | null;
   status: RegStatus;
   submitted_at: string | null;
   parent_phone: string | null;
@@ -43,7 +47,9 @@ type Reg = {
   total_score: number | null;
   first_choice_id: string | null;
   second_choice_id: string | null;
+  [key: string]: unknown;
 };
+
 
 type Doc = {
   id: string;
