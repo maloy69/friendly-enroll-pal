@@ -8,6 +8,10 @@ import { lovable } from "@/integrations/lovable/index";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { supabase } from "@/integrations/supabase/client";
+
 
 export const Route = createFileRoute("/auth")({
   validateSearch: (search: Record<string, unknown>): { next?: string } => {
@@ -39,6 +43,20 @@ function AuthPage() {
   const navigate = useNavigate();
   const search = Route.useSearch();
   const [busy, setBusy] = useState(false);
+  const [email, setEmail] = useState("");
+  const [sandi, setSandi] = useState("");
+
+  async function masukEmail() {
+    setBusy(true);
+    const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password: sandi });
+    if (error) {
+      toast.error("Email atau kata sandi salah.");
+      setBusy(false);
+      return;
+    }
+    toast.success("Berhasil masuk.");
+  }
+
 
   useEffect(() => {
     if (search.next) {
@@ -108,6 +126,47 @@ function AuthPage() {
             {busy ? <Loader2 className="size-4 animate-spin" /> : null}
             Masuk dengan Google
           </Button>
+          <div className="flex items-center gap-3 text-xs text-muted-foreground">
+            <span className="h-px flex-1 bg-border" />
+            atau masuk sebagai petugas sekolah
+            <span className="h-px flex-1 bg-border" />
+          </div>
+          <form
+            className="space-y-3"
+            onSubmit={(e) => {
+              e.preventDefault();
+              void masukEmail();
+            }}
+          >
+            <div className="space-y-1.5">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                autoComplete="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="nama@sekolah.sch.id"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="sandi">Kata sandi</Label>
+              <Input
+                id="sandi"
+                type="password"
+                autoComplete="current-password"
+                required
+                value={sandi}
+                onChange={(e) => setSandi(e.target.value)}
+                placeholder="••••••••"
+              />
+            </div>
+            <Button type="submit" variant="secondary" className="w-full" disabled={busy}>
+              {busy ? <Loader2 className="size-4 animate-spin" /> : null}
+              Masuk dengan email
+            </Button>
+          </form>
           <div className="flex items-start gap-2 rounded-lg bg-muted/60 p-3 text-xs text-muted-foreground">
             <ShieldCheck className="mt-0.5 size-4 shrink-0" />
             <p>
@@ -116,6 +175,7 @@ function AuthPage() {
             </p>
           </div>
         </CardContent>
+
       </Card>
     </div>
   );
