@@ -74,6 +74,13 @@ function DaftarPendaftar() {
   const [filter, setFilter] = useState("all");
   const [q, setQ] = useState("");
   const [selected, setSelected] = useState<Reg | null>(null);
+  const [formOpen, setFormOpen] = useState(false);
+  const [formAwal, setFormAwal] = useState<(RegForm & { id?: string }) | null>(null);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(25);
+  const [checked, setChecked] = useState<string[]>([]);
+
+
 
   const { data: rows, refetch } = useQuery({
     queryKey: ["op-registrations"],
