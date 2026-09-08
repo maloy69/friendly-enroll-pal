@@ -19,6 +19,7 @@ import { Route as PengumumanRouteImport } from './routes/pengumuman'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedKartuRouteImport } from './routes/_authenticated/kartu'
 import { Route as AuthenticatedOperatorRouteRouteImport } from './routes/_authenticated/operator/route'
+import { Route as AuthenticatedPendaftaranSayaRouteImport } from './routes/_authenticated/pendaftaran-saya'
 import { Route as AuthenticatedOperatorIndexRouteImport } from './routes/_authenticated/operator/index'
 import { Route as AuthenticatedOperatorAuditRouteImport } from './routes/_authenticated/operator/audit'
 import { Route as AuthenticatedOperatorDokumenRouteImport } from './routes/_authenticated/operator/dokumen'
@@ -76,6 +77,12 @@ const AuthenticatedOperatorRouteRoute =
   AuthenticatedOperatorRouteRouteImport.update({
     id: '/operator',
     path: '/operator',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedPendaftaranSayaRoute =
+  AuthenticatedPendaftaranSayaRouteImport.update({
+    id: '/pendaftaran-saya',
+    path: '/pendaftaran-saya',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedOperatorIndexRoute =
@@ -137,6 +144,7 @@ export interface FileRoutesByFullPath {
   '/operator': typeof AuthenticatedOperatorRouteRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/kartu': typeof AuthenticatedKartuRoute
+  '/pendaftaran-saya': typeof AuthenticatedPendaftaranSayaRoute
   '/operator/audit': typeof AuthenticatedOperatorAuditRoute
   '/operator/dokumen': typeof AuthenticatedOperatorDokumenRoute
   '/operator/hasil': typeof AuthenticatedOperatorHasilRoute
@@ -155,6 +163,7 @@ export interface FileRoutesByTo {
   '/pengumuman': typeof PengumumanRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/kartu': typeof AuthenticatedKartuRoute
+  '/pendaftaran-saya': typeof AuthenticatedPendaftaranSayaRoute
   '/operator/audit': typeof AuthenticatedOperatorAuditRoute
   '/operator/dokumen': typeof AuthenticatedOperatorDokumenRoute
   '/operator/hasil': typeof AuthenticatedOperatorHasilRoute
@@ -176,6 +185,7 @@ export interface FileRoutesById {
   '/_authenticated/operator': typeof AuthenticatedOperatorRouteRouteWithChildren
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/kartu': typeof AuthenticatedKartuRoute
+  '/_authenticated/pendaftaran-saya': typeof AuthenticatedPendaftaranSayaRoute
   '/_authenticated/operator/audit': typeof AuthenticatedOperatorAuditRoute
   '/_authenticated/operator/dokumen': typeof AuthenticatedOperatorDokumenRoute
   '/_authenticated/operator/hasil': typeof AuthenticatedOperatorHasilRoute
@@ -197,6 +207,7 @@ export interface FileRouteTypes {
     | '/operator'
     | '/dashboard'
     | '/kartu'
+    | '/pendaftaran-saya'
     | '/operator/audit'
     | '/operator/dokumen'
     | '/operator/hasil'
@@ -215,6 +226,7 @@ export interface FileRouteTypes {
     | '/pengumuman'
     | '/dashboard'
     | '/kartu'
+    | '/pendaftaran-saya'
     | '/operator/audit'
     | '/operator/dokumen'
     | '/operator/hasil'
@@ -235,6 +247,7 @@ export interface FileRouteTypes {
     | '/_authenticated/operator'
     | '/_authenticated/dashboard'
     | '/_authenticated/kartu'
+    | '/_authenticated/pendaftaran-saya'
     | '/_authenticated/operator/audit'
     | '/_authenticated/operator/dokumen'
     | '/_authenticated/operator/hasil'
@@ -325,6 +338,13 @@ declare module '@tanstack/react-router' {
       path: '/operator'
       fullPath: '/operator'
       preLoaderRoute: typeof AuthenticatedOperatorRouteRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/pendaftaran-saya': {
+      id: '/_authenticated/pendaftaran-saya'
+      path: '/pendaftaran-saya'
+      fullPath: '/pendaftaran-saya'
+      preLoaderRoute: typeof AuthenticatedPendaftaranSayaRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/operator/': {
@@ -418,12 +438,14 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedOperatorRouteRoute: typeof AuthenticatedOperatorRouteRouteWithChildren
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedKartuRoute: typeof AuthenticatedKartuRoute
+  AuthenticatedPendaftaranSayaRoute: typeof AuthenticatedPendaftaranSayaRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedOperatorRouteRoute: AuthenticatedOperatorRouteRouteWithChildren,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedKartuRoute: AuthenticatedKartuRoute,
+  AuthenticatedPendaftaranSayaRoute: AuthenticatedPendaftaranSayaRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
