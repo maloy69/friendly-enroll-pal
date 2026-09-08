@@ -13,7 +13,16 @@ export const Route = createFileRoute("/_authenticated/operator/hasil")({
   component: HasilPage,
 });
 
-type Major = { id: string; code: string; name: string; quota: number };
+type Major = {
+  id: string;
+  code: string;
+  name: string;
+  quota: number;
+  min_exam_score: number;
+  min_diploma_score: number;
+  exam_criteria_id: string | null;
+  diploma_criteria_id: string | null;
+};
 type Kriteria = { id: string; code: string; name: string; weight: number; max_value: number };
 type Reg = {
   id: string;

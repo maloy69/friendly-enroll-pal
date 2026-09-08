@@ -24,6 +24,7 @@ import { Route as AuthenticatedOperatorIndexRouteImport } from './routes/_authen
 import { Route as AuthenticatedOperatorAuditRouteImport } from './routes/_authenticated/operator/audit'
 import { Route as AuthenticatedOperatorDokumenRouteImport } from './routes/_authenticated/operator/dokumen'
 import { Route as AuthenticatedOperatorHasilRouteImport } from './routes/_authenticated/operator/hasil'
+import { Route as AuthenticatedOperatorNilaiMinimalRouteImport } from './routes/_authenticated/operator/nilai-minimal'
 import { Route as AuthenticatedOperatorPengaturanRouteImport } from './routes/_authenticated/operator/pengaturan'
 import { Route as AuthenticatedOperatorRingkasanRouteImport } from './routes/_authenticated/operator/ringkasan'
 import { Route as AuthenticatedOperatorScanRouteImport } from './routes/_authenticated/operator/scan'
@@ -109,6 +110,12 @@ const AuthenticatedOperatorHasilRoute =
     path: '/hasil',
     getParentRoute: () => AuthenticatedOperatorRouteRoute,
   } as any)
+const AuthenticatedOperatorNilaiMinimalRoute =
+  AuthenticatedOperatorNilaiMinimalRouteImport.update({
+    id: '/nilai-minimal',
+    path: '/nilai-minimal',
+    getParentRoute: () => AuthenticatedOperatorRouteRoute,
+  } as any)
 const AuthenticatedOperatorPengaturanRoute =
   AuthenticatedOperatorPengaturanRouteImport.update({
     id: '/pengaturan',
@@ -148,6 +155,7 @@ export interface FileRoutesByFullPath {
   '/operator/audit': typeof AuthenticatedOperatorAuditRoute
   '/operator/dokumen': typeof AuthenticatedOperatorDokumenRoute
   '/operator/hasil': typeof AuthenticatedOperatorHasilRoute
+  '/operator/nilai-minimal': typeof AuthenticatedOperatorNilaiMinimalRoute
   '/operator/pengaturan': typeof AuthenticatedOperatorPengaturanRoute
   '/operator/ringkasan': typeof AuthenticatedOperatorRingkasanRoute
   '/operator/scan': typeof AuthenticatedOperatorScanRoute
@@ -167,6 +175,7 @@ export interface FileRoutesByTo {
   '/operator/audit': typeof AuthenticatedOperatorAuditRoute
   '/operator/dokumen': typeof AuthenticatedOperatorDokumenRoute
   '/operator/hasil': typeof AuthenticatedOperatorHasilRoute
+  '/operator/nilai-minimal': typeof AuthenticatedOperatorNilaiMinimalRoute
   '/operator/pengaturan': typeof AuthenticatedOperatorPengaturanRoute
   '/operator/ringkasan': typeof AuthenticatedOperatorRingkasanRoute
   '/operator/scan': typeof AuthenticatedOperatorScanRoute
@@ -189,6 +198,7 @@ export interface FileRoutesById {
   '/_authenticated/operator/audit': typeof AuthenticatedOperatorAuditRoute
   '/_authenticated/operator/dokumen': typeof AuthenticatedOperatorDokumenRoute
   '/_authenticated/operator/hasil': typeof AuthenticatedOperatorHasilRoute
+  '/_authenticated/operator/nilai-minimal': typeof AuthenticatedOperatorNilaiMinimalRoute
   '/_authenticated/operator/pengaturan': typeof AuthenticatedOperatorPengaturanRoute
   '/_authenticated/operator/ringkasan': typeof AuthenticatedOperatorRingkasanRoute
   '/_authenticated/operator/scan': typeof AuthenticatedOperatorScanRoute
@@ -211,6 +221,7 @@ export interface FileRouteTypes {
     | '/operator/audit'
     | '/operator/dokumen'
     | '/operator/hasil'
+    | '/operator/nilai-minimal'
     | '/operator/pengaturan'
     | '/operator/ringkasan'
     | '/operator/scan'
@@ -230,6 +241,7 @@ export interface FileRouteTypes {
     | '/operator/audit'
     | '/operator/dokumen'
     | '/operator/hasil'
+    | '/operator/nilai-minimal'
     | '/operator/pengaturan'
     | '/operator/ringkasan'
     | '/operator/scan'
@@ -251,6 +263,7 @@ export interface FileRouteTypes {
     | '/_authenticated/operator/audit'
     | '/_authenticated/operator/dokumen'
     | '/_authenticated/operator/hasil'
+    | '/_authenticated/operator/nilai-minimal'
     | '/_authenticated/operator/pengaturan'
     | '/_authenticated/operator/ringkasan'
     | '/_authenticated/operator/scan'
@@ -375,6 +388,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedOperatorHasilRouteImport
       parentRoute: typeof AuthenticatedOperatorRouteRoute
     }
+    '/_authenticated/operator/nilai-minimal': {
+      id: '/_authenticated/operator/nilai-minimal'
+      path: '/nilai-minimal'
+      fullPath: '/operator/nilai-minimal'
+      preLoaderRoute: typeof AuthenticatedOperatorNilaiMinimalRouteImport
+      parentRoute: typeof AuthenticatedOperatorRouteRoute
+    }
     '/_authenticated/operator/pengaturan': {
       id: '/_authenticated/operator/pengaturan'
       path: '/pengaturan'
@@ -410,6 +430,7 @@ interface AuthenticatedOperatorRouteRouteChildren {
   AuthenticatedOperatorAuditRoute: typeof AuthenticatedOperatorAuditRoute
   AuthenticatedOperatorDokumenRoute: typeof AuthenticatedOperatorDokumenRoute
   AuthenticatedOperatorHasilRoute: typeof AuthenticatedOperatorHasilRoute
+  AuthenticatedOperatorNilaiMinimalRoute: typeof AuthenticatedOperatorNilaiMinimalRoute
   AuthenticatedOperatorPengaturanRoute: typeof AuthenticatedOperatorPengaturanRoute
   AuthenticatedOperatorRingkasanRoute: typeof AuthenticatedOperatorRingkasanRoute
   AuthenticatedOperatorScanRoute: typeof AuthenticatedOperatorScanRoute
@@ -422,6 +443,8 @@ const AuthenticatedOperatorRouteRouteChildren: AuthenticatedOperatorRouteRouteCh
     AuthenticatedOperatorAuditRoute: AuthenticatedOperatorAuditRoute,
     AuthenticatedOperatorDokumenRoute: AuthenticatedOperatorDokumenRoute,
     AuthenticatedOperatorHasilRoute: AuthenticatedOperatorHasilRoute,
+    AuthenticatedOperatorNilaiMinimalRoute:
+      AuthenticatedOperatorNilaiMinimalRoute,
     AuthenticatedOperatorPengaturanRoute: AuthenticatedOperatorPengaturanRoute,
     AuthenticatedOperatorRingkasanRoute: AuthenticatedOperatorRingkasanRoute,
     AuthenticatedOperatorScanRoute: AuthenticatedOperatorScanRoute,
